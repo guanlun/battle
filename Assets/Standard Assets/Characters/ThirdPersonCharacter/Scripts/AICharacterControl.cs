@@ -10,10 +10,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     {
         public NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
-        private Transform target;                                    // target to aim for
         public String team;
 
+        private Transform target;
         private List<AICharacterControl> enemies;
+        private int hp;
 
         private void Start()
         {
@@ -33,8 +34,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     this.enemies.Add(sc);
                 }
             }
-
-            print(this.enemies.Count);
         }
 
         private void FindTarget()
