@@ -24,6 +24,9 @@ ModelImporter:
     100032: Upper_Arm_R
     100034: Upper_Leg_L
     100036: Upper_Leg_R
+    100038: Sword
+    100040: Arm_IK_R
+    100042: Arm_IK_R_001
     400000: Armature
     400002: Bob
     400004: Chest
@@ -43,14 +46,19 @@ ModelImporter:
     400032: Upper_Arm_R
     400034: Upper_Leg_L
     400036: Upper_Leg_R
+    400038: Sword
+    400040: Arm_IK_R
+    400042: Arm_IK_R_001
     2300000: Cube
     3300000: Cube
     4300000: Cube
     4300002: Bob
+    4300004: Sword
     7400000: Default Take
     7400002: ArmatureAction_001
     9500000: //RootNode
     13700000: Bob
+    13700002: Sword
   materials:
     importMaterials: 1
     materialName: 0

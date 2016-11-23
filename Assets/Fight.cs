@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityStandardAssets.Characters.ThirdPerson;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class Fight : MonoBehaviour {
     public Transform target;
+    // public NavMeshAgent agent { get; private set; }
+    public ThirdPersonCharacter character { get; private set; }
 
     static Animator anim;
 
 	// Use this for initialization
 	void Start () {
-        anim = GetComponent<Animator>();
+        // agent = GetComponentInChildren<NavMeshAgent>();
+
+        // anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -18,21 +21,20 @@ public class Fight : MonoBehaviour {
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
         
-        if (anim.GetBool("isMoving"))
-        {
-            if (direction.magnitude > 0.5)
+        // if (anim.GetBool("isMoving"))
+        // {
+            if (direction.magnitude > 1)
             {
-                this.transform.Translate(0, 0, 0.02f);
+                this.transform.Translate(0, 0, 0.1f);
             } else
             {
-                anim.SetBool("isMoving", false);
+                // anim.SetBool("isMoving", false);
             }
-        }
-	}
+        // }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         print("hit");
-        Debug.Log("HIT!!!");
     }
 }
