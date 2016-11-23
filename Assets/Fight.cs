@@ -5,9 +5,11 @@ using System.Collections;
 public class Fight : MonoBehaviour {
     public Transform target;
 
+    static Animator anim;
+
 	// Use this for initialization
 	void Start () {
-
+        anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -15,10 +17,16 @@ public class Fight : MonoBehaviour {
         Vector3 direction = target.position - this.transform.position;
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-
-        if (direction.magnitude > 1)
+        
+        if (anim.GetBool("isMoving"))
         {
-            this.transform.Translate(0, 0, 0.02f);
+            if (direction.magnitude > 1)
+            {
+                this.transform.Translate(0, 0, 0.02f);
+            } else
+            {
+                anim.SetBool("isMoving", false);
+            }
         }
 	}
 }
