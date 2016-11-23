@@ -20,7 +20,7 @@ public class Fight : MonoBehaviour {
         
         if (anim.GetBool("isMoving"))
         {
-            if (direction.magnitude > 1)
+            if (direction.magnitude > 0.5)
             {
                 this.transform.Translate(0, 0, 0.02f);
             } else
@@ -29,4 +29,10 @@ public class Fight : MonoBehaviour {
             }
         }
 	}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        print("hit");
+        Debug.Log("HIT!!!");
+    }
 }
