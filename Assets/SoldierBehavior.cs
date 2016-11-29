@@ -2,18 +2,17 @@
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Fight : MonoBehaviour {
-    
-    // public NavMeshAgent agent { get; private set; }
+public class SoldierBehavior : MonoBehaviour {
     public ThirdPersonCharacter character { get; private set; }
 
     public string team;
 
-    static Animator anim;
+    private NavMeshAgent navMeshAgent;
+    private Animator anim;
 
     private bool alive { get; set; }
 
-    private List<Fight> enemyBehaviors;
+    private List<SoldierBehavior> enemyBehaviors;
     private Transform target;
     private int hp;
 
@@ -22,10 +21,10 @@ public class Fight : MonoBehaviour {
         hp = 100;
         alive = true;
 
-        Fight[] agentBehavior = GameObject.FindObjectsOfType(typeof(Fight)) as Fight[];
+        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
-        enemyBehaviors = new List<Fight>();
-        foreach (Fight behavior in agentBehavior)
+        enemyBehaviors = new List<SoldierBehavior>();
+        foreach (SoldierBehavior behavior in agentBehavior)
         {
             if (behavior.team != team)
             {
@@ -33,15 +32,16 @@ public class Fight : MonoBehaviour {
             }
         }
 
+        navMeshAgent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
     }
 
     private void FindTarget()
     {
         float closestDist = float.MaxValue;
-        Fight closestAgent = null;
+        SoldierBehavior closestAgent = null;
 
-        foreach (Fight behavior in enemyBehaviors)
+        foreach (SoldierBehavior behavior in enemyBehaviors)
         {
             if (!behavior.alive)
             {
@@ -79,33 +79,36 @@ public class Fight : MonoBehaviour {
             return;
         }
 
+        navMeshAgent.destination = target.position;
+
+        /*
         Vector3 direction = target.position - this.transform.position;
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
         
-        // if (anim.GetBool("isMoving"))
-        // {
-            if (direction.magnitude > 1)
-            {
-                this.transform.Translate(0, 0, 0.1f);
-            } else
-            {
-                // anim.SetBool("isMoving", false);
-            }
-        // }
+        if (direction.magnitude > 1.2)
+        {
+            this.transform.Translate(0, 0, 0.1f);
+        } else
+        {
+            anim.SetBool("isAttacking", true);
+        }
+        */
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        print(other.gameObject);
         if (!alive)
         {
             return;
         }
 
-        hp -= 50;
+        hp -= 20;
 
         if (hp <= 0)
         {
+            print(this);
             alive = false;
             anim.SetBool("isKilled", true);
         }
