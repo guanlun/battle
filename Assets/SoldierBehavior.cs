@@ -29,7 +29,7 @@ public class SoldierBehavior : MonoBehaviour {
             attackRange = 20f;
         } else
         {
-            attackRange = 1.2f;
+            attackRange = 1f;
         }
     }
 
@@ -49,6 +49,7 @@ public class SoldierBehavior : MonoBehaviour {
         }
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+
         anim = GetComponent<Animator>();
 
         Transform[] parts = GetComponentsInChildren<Transform>();
@@ -128,6 +129,8 @@ public class SoldierBehavior : MonoBehaviour {
         } else
         {
             navMeshAgent.Stop();
+            transform.LookAt(target);
+
             if (weaponType == "bow")
             {
                 anim.SetBool("isShooting", true);
@@ -160,15 +163,18 @@ public class SoldierBehavior : MonoBehaviour {
     {
         Vector3 pos = new Vector3();
         pos.x = transform.position.x;
-        pos.y = transform.position.y + 1f;
-        pos.z = transform.position.z + 0.5f;
+        pos.y = transform.position.y + 1.5f;
+        pos.z = transform.position.z;
 
         Quaternion q = Quaternion.identity;
-        q.y = 1;
+        // print(q);
+        q.y += 1f;
 
-        GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, q);
+        GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, Quaternion.identity);
+        arrow.transform.parent = transform;
+        arrow.transform.localRotation = q;
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        
-        rb.velocity = new Vector3(0, 0, 20f);
+
+        rb.velocity = transform.forward * 10;
     }
 }
