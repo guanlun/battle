@@ -6,6 +6,7 @@ public class SoldierBehavior : MonoBehaviour {
     public ThirdPersonCharacter character { get; private set; }
 
     public string team;
+    public string weaponType;
 
     private NavMeshAgent navMeshAgent;
     private Animator anim;
@@ -16,10 +17,25 @@ public class SoldierBehavior : MonoBehaviour {
     private Transform target;
     private int hp;
 
-    // Use this for initialization
-    void Start () {
+    protected float attackRange;
+
+    protected void init()
+    {
         hp = 100;
         alive = true;
+
+        if (weaponType == "bow")
+        {
+            attackRange = 20f;
+        } else
+        {
+            attackRange = 1.2f;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
+        init();
 
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
@@ -34,6 +50,30 @@ public class SoldierBehavior : MonoBehaviour {
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+
+        Transform[] parts = GetComponentsInChildren<Transform>();
+        foreach (Transform part in parts)
+        {
+            if (part.name == "Bip001_Prop1") // Weapon name
+            {
+                string weaponPrefabName;
+                if (this.weaponType == "sword")
+                {
+                    weaponPrefabName = "SwordPrefab";
+                } else
+                {
+                    weaponPrefabName = "BowPrefab";
+                }
+
+                GameObject weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
+
+                weapon.transform.parent = part.transform;
+
+                weapon.transform.localPosition = new Vector3(0, 0, 0);
+                weapon.transform.localScale = new Vector3(1, 1, 1);
+                weapon.transform.localRotation = Quaternion.identity;
+            }
+        }
     }
 
     private void FindTarget()
@@ -81,24 +121,26 @@ public class SoldierBehavior : MonoBehaviour {
 
         navMeshAgent.destination = target.position;
 
-        /*
         Vector3 direction = target.position - this.transform.position;
-
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.1f);
         
-        if (direction.magnitude > 1.2)
+        if (direction.magnitude > attackRange)
         {
-            this.transform.Translate(0, 0, 0.1f);
         } else
         {
-            anim.SetBool("isAttacking", true);
+            navMeshAgent.Stop();
+            if (weaponType == "bow")
+            {
+                anim.SetBool("isShooting", true);
+            }
+            else
+            {
+                anim.SetBool("isAttacking", true);
+            }
         }
-        */
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        print(other.gameObject);
         if (!alive)
         {
             return;
@@ -112,5 +154,21 @@ public class SoldierBehavior : MonoBehaviour {
             alive = false;
             anim.SetBool("isKilled", true);
         }
+    }
+
+    void ArcherLoose()
+    {
+        Vector3 pos = new Vector3();
+        pos.x = transform.position.x;
+        pos.y = transform.position.y + 1f;
+        pos.z = transform.position.z + 0.5f;
+
+        Quaternion q = Quaternion.identity;
+        q.y = 1;
+
+        GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, q);
+        Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        
+        rb.velocity = new Vector3(0, 0, 20f);
     }
 }
