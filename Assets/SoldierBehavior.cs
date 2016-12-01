@@ -27,15 +27,25 @@ public class SoldierBehavior : MonoBehaviour {
         if (weaponType == "bow")
         {
             attackRange = 20f;
+
+            navMeshAgent.stoppingDistance = 20f;
         } else
         {
             attackRange = 1f;
+
+            navMeshAgent.stoppingDistance = 1f;
         }
+    }
+
+    void initColor()
+    {
+        Material mat = this.gameObject.GetComponent<Renderer>().material;
     }
 
     // Use this for initialization
     void Start () {
-        init();
+        initColor();
+        
 
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
@@ -75,6 +85,8 @@ public class SoldierBehavior : MonoBehaviour {
                 weapon.transform.localRotation = Quaternion.identity;
             }
         }
+
+        init();
     }
 
     private void FindTarget()
@@ -126,6 +138,9 @@ public class SoldierBehavior : MonoBehaviour {
         
         if (direction.magnitude > attackRange)
         {
+            // navMeshAgent.ResetPath();
+            anim.SetBool("isShooting", false);
+            anim.SetBool("isAttacking", false);
         } else
         {
             navMeshAgent.Stop();
@@ -149,6 +164,17 @@ public class SoldierBehavior : MonoBehaviour {
             return;
         }
 
+        GameObject collidedObj = other.gameObject;
+
+        if (collidedObj.name.IndexOf("ArrowPrefab") != -1)
+        {
+            collidedObj.transform.parent = this.transform;
+
+            Rigidbody arrowRB = collidedObj.GetComponent<Rigidbody>();
+            arrowRB.velocity = Vector3.zero;
+            arrowRB.useGravity = false;
+        }
+
         hp -= 20;
 
         if (hp <= 0)
@@ -167,14 +193,14 @@ public class SoldierBehavior : MonoBehaviour {
         pos.z = transform.position.z;
 
         Quaternion q = Quaternion.identity;
-        // print(q);
-        q.y += 1f;
+        
+        q.y = 1f;
 
         GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, Quaternion.identity);
         arrow.transform.parent = transform;
         arrow.transform.localRotation = q;
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
 
-        rb.velocity = transform.forward * 10;
+        rb.velocity = transform.forward * 30;
     }
 }
