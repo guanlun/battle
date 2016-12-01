@@ -31,8 +31,40 @@ public class GhostFreeRoamCamera : MonoBehaviour
         }
     }
 
+    private void getRayCastPosition()
+    {
+
+    }
+
+    private void SpawnSoldier(Vector3 position, string team, string weaponType)
+    {
+
+    }
+
     private void Update()
     {
+        if (Input.GetMouseButtonUp(0))
+        {
+            Camera camera = gameObject.GetComponent<Camera>();
+            RaycastHit hit;
+
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                Transform hitObj = hit.transform;
+
+                if (hitObj.name == "Ground")
+                {
+                    GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), hit.point, Quaternion.identity);
+                    SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
+                    behavior.team = "red";
+                    behavior.weaponType = "sword";
+                    
+                }
+            }
+            
+        }
         if (allowMovement)
         {
             bool lastMoving = moving;

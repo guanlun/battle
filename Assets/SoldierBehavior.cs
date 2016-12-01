@@ -11,13 +11,15 @@ public class SoldierBehavior : MonoBehaviour {
     private NavMeshAgent navMeshAgent;
     private Animator anim;
 
-    private bool alive { get; set; }
+    public bool alive = true;
 
     private List<SoldierBehavior> enemyBehaviors;
     private Transform target;
     private int hp;
 
     protected float attackRange;
+
+    private Transform torso;
 
     protected void init()
     {
@@ -83,12 +85,17 @@ public class SoldierBehavior : MonoBehaviour {
                 weapon.transform.localPosition = new Vector3(0, 0, 0);
                 weapon.transform.localScale = new Vector3(1, 1, 1);
                 weapon.transform.localRotation = Quaternion.identity;
-            } else if (part.name == "Object02")
+            }
+            else if (part.name == "Object02")
             {
                 Renderer renderer = part.GetComponent<Renderer>();
 
                 string matType = team == "red" ? "RedArmyMat" : "BlueArmyMat";
                 renderer.material = Resources.Load(matType, typeof(Material)) as Material;
+            }
+            else if (part.name == "Object02")
+            {
+                torso = part;
             }
         }
 
@@ -178,9 +185,6 @@ public class SoldierBehavior : MonoBehaviour {
             Quaternion targetRotation = worldRotation * Quaternion.Inverse(this.transform.rotation);
 
             collidedObj.transform.parent = this.transform;
-            // print(collidedObj.transform.localPosition);
-            // print(collidedObj.transform.position);
-            // print("----------------------");
 
             collidedObj.transform.localRotation = targetRotation;
 
@@ -189,17 +193,29 @@ public class SoldierBehavior : MonoBehaviour {
             arrowRB.useGravity = false;
         }
 
-        hp -= 20;
+        hp -= 50;
 
         if (hp <= 0)
         {
             alive = false;
             anim.SetBool("isKilled", true);
+
+            navMeshAgent.Stop();
+
+            Vector3 up = new Vector3(0, 0, -1);
+
+            // print(Quaternion.LookRotation(up));
+            // transform.rotation = Quaternion
+
+            transform.LookAt(up);
+
+            
         }
     }
 
     void ArcherLoose()
     {
+        // print(target);
         Vector3 pos = new Vector3();
         pos.x = transform.position.x;
         pos.y = transform.position.y + 1.5f;
