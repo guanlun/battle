@@ -39,7 +39,7 @@ public class SoldierBehavior : MonoBehaviour {
 
     void initColor()
     {
-        Material mat = this.gameObject.GetComponent<Renderer>().material;
+        // Material mat = this.gameObject.GetComponent<Renderer>().material;
     }
 
     // Use this for initialization
@@ -83,6 +83,12 @@ public class SoldierBehavior : MonoBehaviour {
                 weapon.transform.localPosition = new Vector3(0, 0, 0);
                 weapon.transform.localScale = new Vector3(1, 1, 1);
                 weapon.transform.localRotation = Quaternion.identity;
+            } else if (part.name == "Object02")
+            {
+                Renderer renderer = part.GetComponent<Renderer>();
+
+                string matType = team == "red" ? "RedArmyMat" : "BlueArmyMat";
+                renderer.material = Resources.Load(matType, typeof(Material)) as Material;
             }
         }
 
@@ -168,7 +174,15 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (collidedObj.name.IndexOf("ArrowPrefab") != -1)
         {
+            Quaternion worldRotation = collidedObj.transform.localRotation * collidedObj.transform.parent.rotation;
+            Quaternion targetRotation = worldRotation * Quaternion.Inverse(this.transform.rotation);
+
             collidedObj.transform.parent = this.transform;
+            // print(collidedObj.transform.localPosition);
+            // print(collidedObj.transform.position);
+            // print("----------------------");
+
+            collidedObj.transform.localRotation = targetRotation;
 
             Rigidbody arrowRB = collidedObj.GetComponent<Rigidbody>();
             arrowRB.velocity = Vector3.zero;
@@ -179,7 +193,6 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (hp <= 0)
         {
-            print(this);
             alive = false;
             anim.SetBool("isKilled", true);
         }
@@ -199,6 +212,8 @@ public class SoldierBehavior : MonoBehaviour {
         GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, Quaternion.identity);
         arrow.transform.parent = transform;
         arrow.transform.localRotation = q;
+
+        // arrow.transform.rotation = transform.rotation;
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
 
         rb.velocity = transform.forward * 30;
