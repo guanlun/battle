@@ -16,6 +16,7 @@ public class SoldierBehavior : MonoBehaviour {
     private List<SoldierBehavior> enemyBehaviors;
     private Transform target;
     private int hp;
+    private GameObject weapon;
 
     protected float attackRange;
 
@@ -39,30 +40,13 @@ public class SoldierBehavior : MonoBehaviour {
         }
     }
 
-    void initColor()
-    {
-        // Material mat = this.gameObject.GetComponent<Renderer>().material;
-    }
-
     // Use this for initialization
     void Start () {
-        initColor();
-        
-
-        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
-
-        enemyBehaviors = new List<SoldierBehavior>();
-        foreach (SoldierBehavior behavior in agentBehavior)
-        {
-            if (behavior.team != team)
-            {
-                enemyBehaviors.Add(behavior);
-            }
-        }
-
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         anim = GetComponent<Animator>();
+
+        anim.speed = 0.5f;
 
         Transform[] parts = GetComponentsInChildren<Transform>();
         foreach (Transform part in parts)
@@ -78,13 +62,20 @@ public class SoldierBehavior : MonoBehaviour {
                     weaponPrefabName = "BowPrefab";
                 }
 
-                GameObject weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
+                weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
 
                 weapon.transform.parent = part.transform;
 
                 weapon.transform.localPosition = new Vector3(0, 0, 0);
                 weapon.transform.localScale = new Vector3(1, 1, 1);
                 weapon.transform.localRotation = Quaternion.identity;
+
+                WeaponBehavior weaponBehavior = weapon.GetComponent<WeaponBehavior>();
+
+                if (weaponBehavior != null)
+                {
+                    weaponBehavior.team = this.team;
+                }
             }
             else if (part.name == "Object02")
             {
@@ -104,6 +95,18 @@ public class SoldierBehavior : MonoBehaviour {
 
     private void FindTarget()
     {
+        // TODO: move this back to the Start function?
+        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
+
+        enemyBehaviors = new List<SoldierBehavior>();
+        foreach (SoldierBehavior behavior in agentBehavior)
+        {
+            if (behavior.team != team)
+            {
+                enemyBehaviors.Add(behavior);
+            }
+        }
+
         float closestDist = float.MaxValue;
         SoldierBehavior closestAgent = null;
 
@@ -127,8 +130,10 @@ public class SoldierBehavior : MonoBehaviour {
         if (closestAgent != null)
         {
             target = closestAgent.transform;
+        } else
+        {
+            target = null;
         }
-
     }
 
     // Update is called once per frame
@@ -142,13 +147,17 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (target == null)
         {
+            anim.SetBool("isShooting", false);
+            anim.SetBool("isAttacking", false);
             return;
         }
 
         navMeshAgent.destination = target.position;
 
         Vector3 direction = target.position - this.transform.position;
-        
+
+        transform.LookAt(target);
+
         if (direction.magnitude > attackRange)
         {
             // navMeshAgent.ResetPath();
@@ -156,8 +165,7 @@ public class SoldierBehavior : MonoBehaviour {
             anim.SetBool("isAttacking", false);
         } else
         {
-            navMeshAgent.Stop();
-            transform.LookAt(target);
+            // navMeshAgent.Stop();
 
             if (weaponType == "bow")
             {
@@ -178,6 +186,16 @@ public class SoldierBehavior : MonoBehaviour {
         }
 
         GameObject collidedObj = other.gameObject;
+
+        WeaponBehavior weaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
+
+        if (weaponBehavior != null)
+        {
+            if (weaponBehavior.team == this.team)
+            {
+                return;
+            }
+        }
 
         if (collidedObj.name.IndexOf("ArrowPrefab") != -1)
         {
@@ -201,21 +219,19 @@ public class SoldierBehavior : MonoBehaviour {
             anim.SetBool("isKilled", true);
 
             navMeshAgent.Stop();
+            navMeshAgent.enabled = false;
 
-            Vector3 up = new Vector3(0, 0, -1);
+            transform.Rotate(new Vector3(-90, 0, 0));
 
             // print(Quaternion.LookRotation(up));
             // transform.rotation = Quaternion
 
-            transform.LookAt(up);
 
-            
         }
     }
 
     void ArcherLoose()
     {
-        // print(target);
         Vector3 pos = new Vector3();
         pos.x = transform.position.x;
         pos.y = transform.position.y + 1.5f;
@@ -228,6 +244,9 @@ public class SoldierBehavior : MonoBehaviour {
         GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, Quaternion.identity);
         arrow.transform.parent = transform;
         arrow.transform.localRotation = q;
+
+        WeaponBehavior weaponBehavior = arrow.GetComponent<WeaponBehavior>();
+        weaponBehavior.team = this.team;
 
         // arrow.transform.rotation = transform.rotation;
         Rigidbody rb = arrow.GetComponent<Rigidbody>();

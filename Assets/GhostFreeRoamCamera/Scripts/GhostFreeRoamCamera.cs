@@ -58,9 +58,9 @@ public class GhostFreeRoamCamera : MonoBehaviour
                 {
                     GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), hit.point, Quaternion.identity);
                     SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
+
                     behavior.team = "red";
                     behavior.weaponType = "sword";
-                    
                 }
             }
             
