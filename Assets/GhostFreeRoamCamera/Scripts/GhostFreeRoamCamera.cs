@@ -13,6 +13,7 @@ public class GhostFreeRoamCamera : MonoBehaviour
     public KeyCode backwardButton = KeyCode.S;
     public KeyCode rightButton = KeyCode.D;
     public KeyCode leftButton = KeyCode.A;
+    public KeyCode upwardButton = KeyCode.Space;
 
     public float cursorSensitivity = 0.025f;
     public bool cursorToggleAllowed = true;
@@ -79,6 +80,7 @@ public class GhostFreeRoamCamera : MonoBehaviour
             CheckMove(backwardButton, ref deltaPosition, -transform.forward);
             CheckMove(rightButton, ref deltaPosition, transform.right);
             CheckMove(leftButton, ref deltaPosition, -transform.right);
+            CheckMove(upwardButton, ref deltaPosition, new Vector3(0, 1, 0));
 
             if (moving)
             {

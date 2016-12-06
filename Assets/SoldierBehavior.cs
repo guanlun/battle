@@ -20,7 +20,7 @@ public class SoldierBehavior : MonoBehaviour {
 
     protected float attackRange;
 
-    private Transform torso;
+    private Quaternion fallenTargetRotation;
 
     protected void init()
     {
@@ -86,7 +86,6 @@ public class SoldierBehavior : MonoBehaviour {
             }
             else if (part.name == "Object02")
             {
-                torso = part;
             }
         }
 
@@ -140,6 +139,10 @@ public class SoldierBehavior : MonoBehaviour {
     void Update () {
         if (!alive)
         {
+            Quaternion endR = Quaternion.Euler(90, 0, 0);
+            
+            // transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 1, 0)), 0.1f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
             return;
         }
 
@@ -217,16 +220,14 @@ public class SoldierBehavior : MonoBehaviour {
         {
             alive = false;
             anim.SetBool("isKilled", true);
-
-            navMeshAgent.Stop();
+            
             navMeshAgent.enabled = false;
 
             transform.Rotate(new Vector3(-90, 0, 0));
+            fallenTargetRotation = transform.rotation;
 
-            // print(Quaternion.LookRotation(up));
-            // transform.rotation = Quaternion
-
-
+            // Transform back
+            transform.Rotate(new Vector3(90, 0, 0));
         }
     }
 
