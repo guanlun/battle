@@ -20,24 +20,14 @@ public class SoldierBehavior : MonoBehaviour {
 
     protected float attackRange;
 
+    private Transform weaponParent;
+
     private Quaternion fallenTargetRotation;
 
     protected void init()
     {
         hp = 100;
         alive = true;
-
-        if (weaponType == "bow")
-        {
-            attackRange = 20f;
-
-            navMeshAgent.stoppingDistance = 20f;
-        } else
-        {
-            attackRange = 1f;
-
-            navMeshAgent.stoppingDistance = 1f;
-        }
     }
 
     // Use this for initialization
@@ -51,15 +41,30 @@ public class SoldierBehavior : MonoBehaviour {
         Transform[] parts = GetComponentsInChildren<Transform>();
         foreach (Transform part in parts)
         {
-            if (part.name == "Bip001_Prop1") // Weapon name
+            if (part.name == "Weapon") // Weapon name
             {
-                string weaponPrefabName;
-                if (this.weaponType == "sword")
+                weaponParent = part;
+                string weaponPrefabName = null;
+
+                switch (weaponType)
                 {
-                    weaponPrefabName = "SwordPrefab";
-                } else
-                {
-                    weaponPrefabName = "BowPrefab";
+                    case "bow":
+                        weaponPrefabName = "BowPrefab";
+                        attackRange = 20f;
+                        navMeshAgent.stoppingDistance = 20f;
+                        break;
+
+                    case "sword":
+                        weaponPrefabName = "SwordPrefab";
+                        attackRange = 2f;
+                        navMeshAgent.stoppingDistance = 2f;
+                        break;
+
+                    case "spear":
+                        weaponPrefabName = "SpearPrefab";
+                        attackRange = 5f;
+                        navMeshAgent.stoppingDistance = 5f;
+                        break;
                 }
 
                 weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
@@ -83,9 +88,6 @@ public class SoldierBehavior : MonoBehaviour {
 
                 string matType = team == "red" ? "RedArmyMat" : "BlueArmyMat";
                 renderer.material = Resources.Load(matType, typeof(Material)) as Material;
-            }
-            else if (part.name == "Object02")
-            {
             }
         }
 
@@ -137,11 +139,9 @@ public class SoldierBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        print(weaponParent.rotation);
         if (!alive)
-        {
-            Quaternion endR = Quaternion.Euler(90, 0, 0);
-            
-            // transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 1, 0)), 0.1f);
+        {   
             transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
             return;
         }
@@ -152,6 +152,7 @@ public class SoldierBehavior : MonoBehaviour {
         {
             anim.SetBool("isShooting", false);
             anim.SetBool("isAttacking", false);
+            anim.SetBool("isThrusting", false);
             return;
         }
 
@@ -159,24 +160,29 @@ public class SoldierBehavior : MonoBehaviour {
 
         Vector3 direction = target.position - this.transform.position;
 
-        transform.LookAt(target);
-
         if (direction.magnitude > attackRange)
         {
-            // navMeshAgent.ResetPath();
             anim.SetBool("isShooting", false);
             anim.SetBool("isAttacking", false);
+            anim.SetBool("isThrusting", false);
         } else
         {
+            transform.LookAt(target);
             // navMeshAgent.Stop();
 
-            if (weaponType == "bow")
+            switch (weaponType)
             {
-                anim.SetBool("isShooting", true);
-            }
-            else
-            {
-                anim.SetBool("isAttacking", true);
+                case "bow":
+                    anim.SetBool("isShooting", true);
+                    break;
+
+                case "sword":
+                    anim.SetBool("isAttacking", true);
+                    break;
+
+                case "spear":
+                    anim.SetBool("isThrusting", true);
+                    break;
             }
         }
     }

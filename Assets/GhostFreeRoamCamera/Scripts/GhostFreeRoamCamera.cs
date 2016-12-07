@@ -23,6 +23,8 @@ public class GhostFreeRoamCamera : MonoBehaviour
     private bool moving = false;
     private bool togglePressed = false;
 
+    private string weaponType = "sword";
+
     private void OnEnable()
     {
         if (cursorToggleAllowed)
@@ -32,19 +34,26 @@ public class GhostFreeRoamCamera : MonoBehaviour
         }
     }
 
-    private void getRayCastPosition()
+    private void SpawnSoldier(Vector3 position, string team)
     {
+        GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), position, Quaternion.identity);
+        SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
 
+        behavior.team = team;
+        behavior.weaponType = weaponType;
     }
 
-    private void SpawnSoldier(Vector3 position, string team, string weaponType)
+    void Start()
     {
-
+        Time.timeScale = 0;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        bool leftButtonUp = Input.GetMouseButtonUp(0);
+        bool rightButtonUp = Input.GetMouseButtonUp(1);
+
+        if (leftButtonUp || rightButtonUp)
         {
             Camera camera = gameObject.GetComponent<Camera>();
             RaycastHit hit;
@@ -57,15 +66,33 @@ public class GhostFreeRoamCamera : MonoBehaviour
 
                 if (hitObj.name == "Ground")
                 {
-                    GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), hit.point, Quaternion.identity);
-                    SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
+                    string team = leftButtonUp ? "red" : "blue";
 
-                    behavior.team = "red";
-                    behavior.weaponType = "sword";
+                    SpawnSoldier(hit.point, team);
                 }
             }
-            
         }
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            weaponType = "sword";
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            weaponType = "bow";
+        }
+
+        if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            weaponType = "spear";
+        }
+
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            Time.timeScale = 1 - Time.timeScale;
+        }
+
         if (allowMovement)
         {
             bool lastMoving = moving;
