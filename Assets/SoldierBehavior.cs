@@ -254,7 +254,21 @@ public class SoldierBehavior : MonoBehaviour {
 
         // arrow.transform.rotation = transform.rotation;
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        
+        float speed = 25;
+        float coeff = 5;
+        float dist = Vector3.Distance(target.position, this.transform.position);
 
-        rb.velocity = transform.forward * 30;
+        float angle = Mathf.Asin(coeff * dist / (speed * speed));
+
+        Vector3 vel = transform.forward * speed * Mathf.Cos(angle) + transform.up * speed * Mathf.Sin(angle);
+
+        float randScale = 1f;
+
+        Vector3 random = Random.Range(-randScale, randScale) * transform.forward + 
+            Random.Range(-randScale, randScale) * transform.up + 
+            Random.Range(-randScale, randScale) * transform.right;
+
+        rb.velocity = vel + random;
     }
 }
