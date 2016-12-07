@@ -70,6 +70,8 @@ public class SoldierBehavior : MonoBehaviour {
                         weaponPrefabName = "ShieldPrefab";
                         attackRange = 1;
                         navMeshAgent.stoppingDistance = 1;
+
+                        anim.runtimeAnimatorController = Resources.Load("ShieldManAC") as RuntimeAnimatorController;
                         break;
                 }
 
