@@ -46,6 +46,7 @@ ModelImporter:
     100076: Bone001
     100078: Object02
     100080: Object01_001
+    100082: Weapon
     400000: //RootNode
     400002: Bip001_001
     400004: Bip001_Footsteps
@@ -87,6 +88,7 @@ ModelImporter:
     400076: Bone001
     400078: Object02
     400080: Object01_001
+    400082: Weapon
     4300000: Object02
     4300002: Object01_001
     7400000: Default Take
