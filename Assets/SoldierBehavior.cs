@@ -52,18 +52,21 @@ public class SoldierBehavior : MonoBehaviour {
                         weaponPrefabName = "BowPrefab";
                         attackRange = 20f;
                         navMeshAgent.stoppingDistance = 20f;
+                        anim.runtimeAnimatorController = Resources.Load("ArcherAC") as RuntimeAnimatorController;
                         break;
 
                     case "sword":
                         weaponPrefabName = "SwordPrefab";
                         attackRange = 2f;
                         navMeshAgent.stoppingDistance = 2f;
+                        anim.runtimeAnimatorController = Resources.Load("SwordManAC") as RuntimeAnimatorController;
                         break;
 
                     case "spear":
                         weaponPrefabName = "SpearPrefab";
                         attackRange = 5f;
                         navMeshAgent.stoppingDistance = 5f;
+                        anim.runtimeAnimatorController = Resources.Load("SpearManAC") as RuntimeAnimatorController;
                         break;
 
                     case "shield":
@@ -157,9 +160,7 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (target == null)
         {
-            anim.SetBool("isShooting", false);
             anim.SetBool("isAttacking", false);
-            anim.SetBool("isThrusting", false);
             return;
         }
 
@@ -169,27 +170,11 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (direction.magnitude > attackRange)
         {
-            anim.SetBool("isShooting", false);
             anim.SetBool("isAttacking", false);
-            anim.SetBool("isThrusting", false);
         } else
         {
             transform.LookAt(target);
-
-            switch (weaponType)
-            {
-                case "bow":
-                    anim.SetBool("isShooting", true);
-                    break;
-
-                case "sword":
-                    anim.SetBool("isAttacking", true);
-                    break;
-
-                case "spear":
-                    anim.SetBool("isThrusting", true);
-                    break;
-            }
+            anim.SetBool("isAttacking", true);
         }
     }
 
@@ -214,6 +199,12 @@ public class SoldierBehavior : MonoBehaviour {
 
         if (collidedObj.name.IndexOf("ArrowPrefab") != -1)
         {
+            WeaponBehavior arrowBehavior = collidedObj.GetComponent<WeaponBehavior>();
+            if (arrowBehavior.blocked)
+            {
+                return;
+            }
+
             Quaternion worldRotation = collidedObj.transform.localRotation * collidedObj.transform.parent.rotation;
             Quaternion targetRotation = worldRotation * Quaternion.Inverse(this.transform.rotation);
 
