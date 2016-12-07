@@ -65,6 +65,12 @@ public class SoldierBehavior : MonoBehaviour {
                         attackRange = 5f;
                         navMeshAgent.stoppingDistance = 5f;
                         break;
+
+                    case "shield":
+                        weaponPrefabName = "ShieldPrefab";
+                        attackRange = 1;
+                        navMeshAgent.stoppingDistance = 1;
+                        break;
                 }
 
                 weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
@@ -139,7 +145,6 @@ public class SoldierBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        print(weaponParent.rotation);
         if (!alive)
         {   
             transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
@@ -168,7 +173,6 @@ public class SoldierBehavior : MonoBehaviour {
         } else
         {
             transform.LookAt(target);
-            // navMeshAgent.Stop();
 
             switch (weaponType)
             {

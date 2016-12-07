@@ -88,6 +88,11 @@ public class GhostFreeRoamCamera : MonoBehaviour
             weaponType = "spear";
         }
 
+        if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            weaponType = "shield";
+        }
+
         if (Input.GetKeyUp(KeyCode.Return))
         {
             Time.timeScale = 1 - Time.timeScale;
