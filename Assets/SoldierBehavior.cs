@@ -8,22 +8,22 @@ public class SoldierBehavior : MonoBehaviour {
     public string team;
     public string weaponType;
 
-    private NavMeshAgent navMeshAgent;
-    private Animator anim;
+    protected NavMeshAgent navMeshAgent;
+    protected Animator anim;
 
     public bool alive = true;
 
-    private List<SoldierBehavior> enemyBehaviors;
-    private Transform target;
-    private int hp;
-    private GameObject weapon;
-    private WeaponBehavior weaponBehavior;
+    protected List<SoldierBehavior> enemyBehaviors;
+    protected Transform target;
+    protected int hp;
+    protected GameObject weapon;
+    protected WeaponBehavior weaponBehavior;
 
     protected float attackRange;
 
-    private Transform weaponParent;
+    protected Transform weaponParent;
 
-    private Quaternion fallenTargetRotation;
+    protected Quaternion fallenTargetRotation;
 
     protected void init() {
         hp = 100;
@@ -42,7 +42,7 @@ public class SoldierBehavior : MonoBehaviour {
         foreach (Transform part in parts) {
             if (part.name == "Weapon") // Weapon name
             {
-                weaponParent = part;
+                this.weaponParent = part;
                 string weaponPrefabName = null;
 
                 switch (weaponType) {
@@ -98,7 +98,7 @@ public class SoldierBehavior : MonoBehaviour {
         init();
     }
 
-    private void FindTarget() {
+    protected void FindTarget() {
         // TODO: move this back to the Start function?
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
@@ -189,8 +189,6 @@ public class SoldierBehavior : MonoBehaviour {
         }
 
         hp -= damageInflicted;
-
-        // print(enemyWeaponBehavior.type + " " + hp);
 
         if (hp <= 0) {
             alive = false;

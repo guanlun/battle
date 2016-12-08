@@ -32,11 +32,18 @@ public class GhostFreeRoamCamera : MonoBehaviour {
     }
 
     private void SpawnSoldier(Vector3 position, string team) {
-        GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), position, Quaternion.identity);
-        SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
+        if (weaponType == "horse") {
+            GameObject knight = (GameObject)Instantiate(Resources.Load("KnightPrefab"), position, Quaternion.identity);
+            KnightBehavior behavior = knight.GetComponent<KnightBehavior>();
 
-        behavior.team = team;
-        behavior.weaponType = weaponType;
+            behavior.team = team;
+        } else {
+            GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), position, Quaternion.identity);
+            SoldierBehavior behavior = soldier.GetComponent<SoldierBehavior>();
+
+            behavior.team = team;
+            behavior.weaponType = weaponType;
+        }
     }
 
     void Start() {
@@ -77,6 +84,10 @@ public class GhostFreeRoamCamera : MonoBehaviour {
 
         if (Input.GetKeyUp(KeyCode.Alpha4)) {
             weaponType = "shield";
+        }
+        
+        if (Input.GetKeyUp(KeyCode.Alpha5)) {
+            weaponType = "horse";
         }
 
         if (Input.GetKeyUp(KeyCode.Return)) {

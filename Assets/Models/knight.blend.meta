@@ -1,43 +1,121 @@
 fileFormatVersion: 2
 guid: b8bd75ab891a6d54396a121791ea687a
-timeCreated: 1481229735
+timeCreated: 1481234438
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Armature
-    100002: Bone
-    100004: Bone_001
-    100006: Bone_002
-    100008: Bone_003
-    100010: Bone_004
-    100012: Bone_005
-    100014: Bone_006
-    100016: Bone_007
-    100018: Bone_008
-    100020: Bone_009
-    100022: Bone_010
-    100024: Cube
-    100026: //RootNode
+    100002: Bip001_001
+    100004: Bip001_Footsteps
+    100006: Bip001_Head
+    100008: Bip001_L_Calf
+    100010: Bip001_L_Clavicle
+    100012: Bip001_L_Finger0
+    100014: Bip001_L_Finger01
+    100016: Bip001_L_Finger02
+    100018: Bip001_L_Finger1
+    100020: Bip001_L_Finger11
+    100022: Bip001_L_Finger12
+    100024: Bip001_L_Foot
+    100026: Bip001_L_Forearm
+    100028: Bip001_L_Hand
+    100030: Bip001_L_Thigh
+    100032: Bip001_L_Toe0
+    100034: Bip001_L_UpperArm
+    100036: Bip001_Neck
+    100038: Bip001_Pelvis
+    100040: Bip001_R_Calf
+    100042: Bip001_R_Clavicle
+    100044: Bip001_R_Finger0
+    100046: Bip001_R_Finger01
+    100048: Bip001_R_Finger02
+    100050: Bip001_R_Finger1
+    100052: Bip001_R_Finger11
+    100054: Bip001_R_Finger12
+    100056: Bip001_R_Foot
+    100058: Bip001_R_Forearm
+    100060: Bip001_R_Hand
+    100062: Bip001_R_Thigh
+    100064: Bip001_R_Toe0
+    100066: Bip001_R_UpperArm
+    100068: Bip001_Spine
+    100070: Bip001_Spine1
+    100072: Bone
+    100074: Bone001
+    100076: Bone_001
+    100078: Bone_002
+    100080: Bone_003
+    100082: Bone_004
+    100084: Bone_005
+    100086: Bone_006
+    100088: Bone_007
+    100090: Bone_008
+    100092: Bone_009
+    100094: Bone_010
+    100096: Cube
+    100098: //RootNode
+    100100: Object02
+    100102: Weapon
     400000: Armature
-    400002: Bone
-    400004: Bone_001
-    400006: Bone_002
-    400008: Bone_003
-    400010: Bone_004
-    400012: Bone_005
-    400014: Bone_006
-    400016: Bone_007
-    400018: Bone_008
-    400020: Bone_009
-    400022: Bone_010
-    400024: Cube
-    400026: //RootNode
+    400002: Bip001_001
+    400004: Bip001_Footsteps
+    400006: Bip001_Head
+    400008: Bip001_L_Calf
+    400010: Bip001_L_Clavicle
+    400012: Bip001_L_Finger0
+    400014: Bip001_L_Finger01
+    400016: Bip001_L_Finger02
+    400018: Bip001_L_Finger1
+    400020: Bip001_L_Finger11
+    400022: Bip001_L_Finger12
+    400024: Bip001_L_Foot
+    400026: Bip001_L_Forearm
+    400028: Bip001_L_Hand
+    400030: Bip001_L_Thigh
+    400032: Bip001_L_Toe0
+    400034: Bip001_L_UpperArm
+    400036: Bip001_Neck
+    400038: Bip001_Pelvis
+    400040: Bip001_R_Calf
+    400042: Bip001_R_Clavicle
+    400044: Bip001_R_Finger0
+    400046: Bip001_R_Finger01
+    400048: Bip001_R_Finger02
+    400050: Bip001_R_Finger1
+    400052: Bip001_R_Finger11
+    400054: Bip001_R_Finger12
+    400056: Bip001_R_Foot
+    400058: Bip001_R_Forearm
+    400060: Bip001_R_Hand
+    400062: Bip001_R_Thigh
+    400064: Bip001_R_Toe0
+    400066: Bip001_R_UpperArm
+    400068: Bip001_Spine
+    400070: Bip001_Spine1
+    400072: Bone
+    400074: Bone001
+    400076: Bone_001
+    400078: Bone_002
+    400080: Bone_003
+    400082: Bone_004
+    400084: Bone_005
+    400086: Bone_006
+    400088: Bone_007
+    400090: Bone_008
+    400092: Bone_009
+    400094: Bone_010
+    400096: Cube
+    400098: //RootNode
+    400100: Object02
+    400102: Weapon
     4300000: Cube
+    4300002: Object02
     7400000: Default Take
     7400002: ArmatureAction
     9500000: //RootNode
     13700000: Cube
+    13700002: Object02
   materials:
     importMaterials: 1
     materialName: 0
