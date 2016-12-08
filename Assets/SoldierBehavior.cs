@@ -204,9 +204,8 @@ public class SoldierBehavior : MonoBehaviour {
             {
                 return;
             }
-
-            Quaternion worldRotation = collidedObj.transform.localRotation * collidedObj.transform.parent.rotation;
-            Quaternion targetRotation = worldRotation * Quaternion.Inverse(this.transform.rotation);
+            
+            Quaternion targetRotation = collidedObj.transform.rotation * Quaternion.Inverse(this.transform.rotation);
 
             collidedObj.transform.parent = this.transform;
 
@@ -241,18 +240,13 @@ public class SoldierBehavior : MonoBehaviour {
         pos.y = transform.position.y + 1.5f;
         pos.z = transform.position.z;
 
-        Quaternion q = Quaternion.identity;
-        
-        q.y = 1f;
-
         GameObject arrow = (GameObject)Instantiate(Resources.Load("ArrowPrefab"), pos, Quaternion.identity);
-        arrow.transform.parent = transform;
-        arrow.transform.localRotation = q;
 
         WeaponBehavior weaponBehavior = arrow.GetComponent<WeaponBehavior>();
         weaponBehavior.team = this.team;
 
-        // arrow.transform.rotation = transform.rotation;
+        arrow.transform.rotation = transform.rotation;
+        arrow.transform.Rotate(new Vector3(0, 90, 0));
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
         
         float speed = 25;
@@ -263,7 +257,7 @@ public class SoldierBehavior : MonoBehaviour {
 
         Vector3 vel = transform.forward * speed * Mathf.Cos(angle) + transform.up * speed * Mathf.Sin(angle);
 
-        float randScale = 1f;
+        float randScale = 0.5f;
 
         Vector3 random = Random.Range(-randScale, randScale) * transform.forward + 
             Random.Range(-randScale, randScale) * transform.up + 
