@@ -76,19 +76,16 @@ public class SoldierBehavior : MonoBehaviour {
                         break;
                 }
 
-                weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
-                this.weaponBehavior = weapon.GetComponent<WeaponBehavior>();
+                this.weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
+                this.weapon.transform.parent = part.transform;
+                this.weapon.transform.localPosition = new Vector3(0, 0, 0);
+                this.weapon.transform.localScale = new Vector3(1, 1, 1);
+                this.weapon.transform.localRotation = Quaternion.identity;
 
-                weapon.transform.parent = part.transform;
-
-                weapon.transform.localPosition = new Vector3(0, 0, 0);
-                weapon.transform.localScale = new Vector3(1, 1, 1);
-                weapon.transform.localRotation = Quaternion.identity;
-
-                WeaponBehavior weaponBehavior = weapon.GetComponent<WeaponBehavior>();
-
-                if (weaponBehavior != null) {
-                    weaponBehavior.team = this.team;
+                this.weaponBehavior = this.weapon.GetComponent<WeaponBehavior>();
+                if (this.weaponBehavior != null) {
+                    this.weaponBehavior.team = this.team;
+                    this.weaponBehavior.holder = this;
                 }
             } else if (part.name == "Object02") {
                 Renderer renderer = part.GetComponent<Renderer>();
@@ -177,15 +174,21 @@ public class SoldierBehavior : MonoBehaviour {
             }
         }
 
-        if (collidedObj.name.IndexOf("ArrowPrefab") != -1) {
+        int damageInflicted = 0;
+
+        if (enemyWeaponBehavior.type == WeaponBehavior.TYPE_ARROW) {
             if (enemyWeaponBehavior.blocked) {
                 return;
+            } else {
+                damageInflicted = enemyWeaponBehavior.damage;
             }
+        } else {
+            damageInflicted = this.weaponBehavior.defend(enemyWeaponBehavior, Random.Range(0f, 1f));
         }
 
-        int damageInflicted = this.weaponBehavior.defend(enemyWeaponBehavior);
-
         hp -= damageInflicted;
+
+        // print(enemyWeaponBehavior.type + " " + hp);
 
         if (hp <= 0) {
             alive = false;

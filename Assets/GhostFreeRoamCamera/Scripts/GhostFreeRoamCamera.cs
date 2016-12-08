@@ -55,8 +55,6 @@ public class GhostFreeRoamCamera : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit)) {
                 Transform hitObj = hit.transform;
-
-                print(hitObj.transform);
                 if (hitObj.name == "Ground" || hitObj.parent.name == "Castle") {
                     string team = leftButtonUp ? "red" : "blue";
 
