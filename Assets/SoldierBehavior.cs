@@ -24,14 +24,13 @@ public class SoldierBehavior : MonoBehaviour {
 
     private Quaternion fallenTargetRotation;
 
-    protected void init()
-    {
+    protected void init() {
         hp = 100;
         alive = true;
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         anim = GetComponent<Animator>();
@@ -39,15 +38,13 @@ public class SoldierBehavior : MonoBehaviour {
         anim.speed = 0.5f;
 
         Transform[] parts = GetComponentsInChildren<Transform>();
-        foreach (Transform part in parts)
-        {
+        foreach (Transform part in parts) {
             if (part.name == "Weapon") // Weapon name
             {
                 weaponParent = part;
                 string weaponPrefabName = null;
 
-                switch (weaponType)
-                {
+                switch (weaponType) {
                     case "bow":
                         weaponPrefabName = "BowPrefab";
                         attackRange = 20f;
@@ -88,13 +85,10 @@ public class SoldierBehavior : MonoBehaviour {
 
                 WeaponBehavior weaponBehavior = weapon.GetComponent<WeaponBehavior>();
 
-                if (weaponBehavior != null)
-                {
+                if (weaponBehavior != null) {
                     weaponBehavior.team = this.team;
                 }
-            }
-            else if (part.name == "Object02")
-            {
+            } else if (part.name == "Object02") {
                 Renderer renderer = part.GetComponent<Renderer>();
 
                 string matType = team == "red" ? "RedArmyMat" : "BlueArmyMat";
@@ -105,16 +99,13 @@ public class SoldierBehavior : MonoBehaviour {
         init();
     }
 
-    private void FindTarget()
-    {
+    private void FindTarget() {
         // TODO: move this back to the Start function?
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
         enemyBehaviors = new List<SoldierBehavior>();
-        foreach (SoldierBehavior behavior in agentBehavior)
-        {
-            if (behavior.team != team)
-            {
+        foreach (SoldierBehavior behavior in agentBehavior) {
+            if (behavior.team != team) {
                 enemyBehaviors.Add(behavior);
             }
         }
@@ -122,44 +113,37 @@ public class SoldierBehavior : MonoBehaviour {
         float closestDist = float.MaxValue;
         SoldierBehavior closestAgent = null;
 
-        foreach (SoldierBehavior behavior in enemyBehaviors)
-        {
-            if (!behavior.alive)
-            {
+        foreach (SoldierBehavior behavior in enemyBehaviors) {
+            if (!behavior.alive) {
                 continue;
             }
 
             Vector3 enemyPosition = behavior.transform.position;
             float dist = Vector3.Distance(enemyPosition, transform.position);
 
-            if (dist < closestDist)
-            {
+            if (dist < closestDist) {
                 closestDist = dist;
                 closestAgent = behavior;
             }
         }
 
-        if (closestAgent != null)
-        {
+        if (closestAgent != null) {
             target = closestAgent.transform;
-        } else
-        {
+        } else {
             target = null;
         }
     }
 
     // Update is called once per frame
-    void Update () {
-        if (!alive)
-        {   
+    void Update() {
+        if (!alive) {
             transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
             return;
         }
 
         FindTarget();
 
-        if (target == null)
-        {
+        if (target == null) {
             anim.SetBool("isAttacking", false);
             return;
         }
@@ -168,20 +152,16 @@ public class SoldierBehavior : MonoBehaviour {
 
         Vector3 direction = target.position - this.transform.position;
 
-        if (direction.magnitude > attackRange)
-        {
+        if (direction.magnitude > attackRange) {
             anim.SetBool("isAttacking", false);
-        } else
-        {
-            transform.LookAt(target);
+        } else {
+            transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
             anim.SetBool("isAttacking", true);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!alive)
-        {
+    private void OnTriggerEnter(Collider other) {
+        if (!alive) {
             return;
         }
 
@@ -189,42 +169,25 @@ public class SoldierBehavior : MonoBehaviour {
 
         WeaponBehavior weaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
 
-        if (weaponBehavior != null)
-        {
-            if (weaponBehavior.team == this.team)
-            {
+        if (weaponBehavior != null) {
+            if (weaponBehavior.team == this.team) {
                 return;
             }
         }
 
-        if (collidedObj.name.IndexOf("ArrowPrefab") != -1)
-        {
+        if (collidedObj.name.IndexOf("ArrowPrefab") != -1) {
             WeaponBehavior arrowBehavior = collidedObj.GetComponent<WeaponBehavior>();
-            if (arrowBehavior.blocked)
-            {
+            if (arrowBehavior.blocked) {
                 return;
             }
-            
-            /*
-            Quaternion targetRotation = collidedObj.transform.rotation * Quaternion.Inverse(this.transform.rotation);
-
-            collidedObj.transform.parent = this.transform;
-
-            collidedObj.transform.localRotation = targetRotation;
-
-            Rigidbody arrowRB = collidedObj.GetComponent<Rigidbody>();
-            arrowRB.velocity = Vector3.zero;
-            arrowRB.useGravity = false;
-            */
         }
 
         hp -= 50;
 
-        if (hp <= 0)
-        {
+        if (hp <= 0) {
             alive = false;
             anim.SetBool("isKilled", true);
-            
+
             navMeshAgent.enabled = false;
 
             transform.Rotate(new Vector3(-90, 0, 0));
@@ -235,8 +198,7 @@ public class SoldierBehavior : MonoBehaviour {
         }
     }
 
-    void ArcherLoose()
-    {
+    void ArcherLoose() {
         Vector3 pos = new Vector3();
         pos.x = transform.position.x;
         pos.y = transform.position.y + 1.5f;
@@ -250,7 +212,7 @@ public class SoldierBehavior : MonoBehaviour {
         arrow.transform.rotation = transform.rotation;
         arrow.transform.Rotate(new Vector3(0, 90, 0));
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        
+
         float speed = 25;
         float coeff = 5;
         float dist = Vector3.Distance(target.position, this.transform.position);
@@ -261,8 +223,8 @@ public class SoldierBehavior : MonoBehaviour {
 
         float randScale = 0.5f;
 
-        Vector3 random = Random.Range(-randScale, randScale) * transform.forward + 
-            Random.Range(-randScale, randScale) * transform.up + 
+        Vector3 random = Random.Range(-randScale, randScale) * transform.forward +
+            Random.Range(-randScale, randScale) * transform.up +
             Random.Range(-randScale, randScale) * transform.right;
 
         rb.velocity = vel + random;

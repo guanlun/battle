@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class GhostFreeRoamCamera : MonoBehaviour
-{
+public class GhostFreeRoamCamera : MonoBehaviour {
     public float initialSpeed = 10f;
     public float increaseSpeed = 1.25f;
 
@@ -25,17 +24,14 @@ public class GhostFreeRoamCamera : MonoBehaviour
 
     private string weaponType = "sword";
 
-    private void OnEnable()
-    {
-        if (cursorToggleAllowed)
-        {
+    private void OnEnable() {
+        if (cursorToggleAllowed) {
             Screen.lockCursor = true;
             Cursor.visible = false;
         }
     }
 
-    private void SpawnSoldier(Vector3 position, string team)
-    {
+    private void SpawnSoldier(Vector3 position, string team) {
         GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), position, Quaternion.identity);
         SoldierBehavior behavior = soldier.GetComponent<MonoBehaviour>() as SoldierBehavior;
 
@@ -43,30 +39,25 @@ public class GhostFreeRoamCamera : MonoBehaviour
         behavior.weaponType = weaponType;
     }
 
-    void Start()
-    {
+    void Start() {
         Time.timeScale = 0;
     }
 
-    private void Update()
-    {
+    private void Update() {
         bool leftButtonUp = Input.GetMouseButtonUp(0);
         bool rightButtonUp = Input.GetMouseButtonUp(1);
 
-        if (leftButtonUp || rightButtonUp)
-        {
+        if (leftButtonUp || rightButtonUp) {
             Camera camera = gameObject.GetComponent<Camera>();
             RaycastHit hit;
 
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
-            {
+            if (Physics.Raycast(ray, out hit)) {
                 Transform hitObj = hit.transform;
 
                 print(hitObj.transform);
-                if (hitObj.name == "Ground" || hitObj.parent.name == "Castle")
-                {
+                if (hitObj.name == "Ground" || hitObj.parent.name == "Castle") {
                     string team = leftButtonUp ? "red" : "blue";
 
                     SpawnSoldier(hit.point, team);
@@ -74,33 +65,27 @@ public class GhostFreeRoamCamera : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
+        if (Input.GetKeyUp(KeyCode.Alpha1)) {
             weaponType = "sword";
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
+        if (Input.GetKeyUp(KeyCode.Alpha2)) {
             weaponType = "bow";
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
+        if (Input.GetKeyUp(KeyCode.Alpha3)) {
             weaponType = "spear";
         }
 
-        if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
+        if (Input.GetKeyUp(KeyCode.Alpha4)) {
             weaponType = "shield";
         }
 
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
+        if (Input.GetKeyUp(KeyCode.Return)) {
             Time.timeScale = 1 - Time.timeScale;
         }
 
-        if (allowMovement)
-        {
+        if (allowMovement) {
             bool lastMoving = moving;
             Vector3 deltaPosition = Vector3.zero;
 
@@ -115,48 +100,37 @@ public class GhostFreeRoamCamera : MonoBehaviour
             CheckMove(leftButton, ref deltaPosition, -transform.right);
             CheckMove(upwardButton, ref deltaPosition, new Vector3(0, 1, 0));
 
-            if (moving)
-            {
+            if (moving) {
                 if (moving != lastMoving)
                     currentSpeed = initialSpeed;
 
                 transform.position += deltaPosition * currentSpeed * Time.deltaTime;
-            }
-            else currentSpeed = 0f;            
+            } else currentSpeed = 0f;
         }
 
-        if (allowRotation)
-        {
+        if (allowRotation) {
             Vector3 eulerAngles = transform.eulerAngles;
             eulerAngles.x += -Input.GetAxis("Mouse Y") * 359f * cursorSensitivity;
             eulerAngles.y += Input.GetAxis("Mouse X") * 359f * cursorSensitivity;
             transform.eulerAngles = eulerAngles;
         }
 
-        if (cursorToggleAllowed)
-        {
-            if (Input.GetKey(cursorToggleButton))
-            {
-                if (!togglePressed)
-                {
+        if (cursorToggleAllowed) {
+            if (Input.GetKey(cursorToggleButton)) {
+                if (!togglePressed) {
                     togglePressed = true;
                     Screen.lockCursor = !Screen.lockCursor;
                     Cursor.visible = !Cursor.visible;
                 }
-            }
-            else togglePressed = false;
-        }
-        else
-        {
+            } else togglePressed = false;
+        } else {
             togglePressed = false;
             Cursor.visible = false;
         }
     }
 
-    private void CheckMove(KeyCode keyCode, ref Vector3 deltaPosition, Vector3 directionVector)
-    {
-        if (Input.GetKey(keyCode))
-        {
+    private void CheckMove(KeyCode keyCode, ref Vector3 deltaPosition, Vector3 directionVector) {
+        if (Input.GetKey(keyCode)) {
             moving = true;
             deltaPosition += directionVector;
         }
