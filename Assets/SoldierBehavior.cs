@@ -49,28 +49,28 @@ public class SoldierBehavior : MonoBehaviour {
                     case "bow":
                         weaponPrefabName = "BowPrefab";
                         attackRange = 20f;
-                        navMeshAgent.stoppingDistance = 20f;
+                        // navMeshAgent.stoppingDistance = 20f;
                         anim.runtimeAnimatorController = Resources.Load("ArcherAC") as RuntimeAnimatorController;
                         break;
 
                     case "sword":
                         weaponPrefabName = "SwordPrefab";
                         attackRange = 2f;
-                        navMeshAgent.stoppingDistance = 2f;
+                        // navMeshAgent.stoppingDistance = 2f;
                         anim.runtimeAnimatorController = Resources.Load("SwordManAC") as RuntimeAnimatorController;
                         break;
 
                     case "spear":
                         weaponPrefabName = "SpearPrefab";
                         attackRange = 5f;
-                        navMeshAgent.stoppingDistance = 5f;
+                        // navMeshAgent.stoppingDistance = 5f;
                         anim.runtimeAnimatorController = Resources.Load("SpearManAC") as RuntimeAnimatorController;
                         break;
 
                     case "shield":
                         weaponPrefabName = "ShieldPrefab";
                         attackRange = 1;
-                        navMeshAgent.stoppingDistance = 1;
+                        // navMeshAgent.stoppingDistance = 1;
 
                         anim.runtimeAnimatorController = Resources.Load("ShieldManAC") as RuntimeAnimatorController;
                         break;
@@ -152,8 +152,10 @@ public class SoldierBehavior : MonoBehaviour {
         Vector3 direction = target.position - this.transform.position;
 
         if (direction.magnitude > attackRange) {
+            navMeshAgent.Resume();
             anim.SetBool("isAttacking", false);
         } else {
+            navMeshAgent.Stop();
             transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
             anim.SetBool("isAttacking", true);
         }

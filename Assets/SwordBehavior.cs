@@ -8,7 +8,6 @@ public class SwordBehavior : WeaponBehavior {
     }
 
     public override int defend(WeaponBehavior attackWeapon, float rand) {
-        print("defending against " + attackWeapon.type);
         float defendAngle = this.getDefendAngle(attackWeapon);
 
         bool blocked = false;
