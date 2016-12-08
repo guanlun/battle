@@ -205,6 +205,7 @@ public class SoldierBehavior : MonoBehaviour {
                 return;
             }
             
+            /*
             Quaternion targetRotation = collidedObj.transform.rotation * Quaternion.Inverse(this.transform.rotation);
 
             collidedObj.transform.parent = this.transform;
@@ -214,6 +215,7 @@ public class SoldierBehavior : MonoBehaviour {
             Rigidbody arrowRB = collidedObj.GetComponent<Rigidbody>();
             arrowRB.velocity = Vector3.zero;
             arrowRB.useGravity = false;
+            */
         }
 
         hp -= 50;
