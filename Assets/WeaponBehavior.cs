@@ -5,18 +5,25 @@ public class WeaponBehavior : MonoBehaviour {
     public string team;
     public bool blocked;
 
-    // Use this for initialization
+    public string type;
+    public int damage;
+
+    public static string TYPE_SWORD = "sword";
+    public static string TYPE_SPEAR = "spear";
+    public static string TYPE_SHIELD = "shield";
+    public static string TYPE_BOW = "bow";
+    public static string TYPE_ARROW = "arrow";
+
     void Start() {
 
     }
 
-    // Update is called once per frame
     void Update() {
-
+        
     }
 
-    void defend(WeaponBehavior attackWeapon) {
-
+    public virtual int defend(WeaponBehavior attackWeapon) {
+        return attackWeapon.damage;
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -34,5 +41,4 @@ public class WeaponBehavior : MonoBehaviour {
             }
         }
     }
-
 }

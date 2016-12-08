@@ -17,6 +17,7 @@ public class SoldierBehavior : MonoBehaviour {
     private Transform target;
     private int hp;
     private GameObject weapon;
+    private WeaponBehavior weaponBehavior;
 
     protected float attackRange;
 
@@ -76,6 +77,7 @@ public class SoldierBehavior : MonoBehaviour {
                 }
 
                 weapon = (GameObject)Instantiate(Resources.Load(weaponPrefabName));
+                this.weaponBehavior = weapon.GetComponent<WeaponBehavior>();
 
                 weapon.transform.parent = part.transform;
 
@@ -167,22 +169,23 @@ public class SoldierBehavior : MonoBehaviour {
 
         GameObject collidedObj = other.gameObject;
 
-        WeaponBehavior weaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
+        WeaponBehavior enemyWeaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
 
-        if (weaponBehavior != null) {
-            if (weaponBehavior.team == this.team) {
+        if (enemyWeaponBehavior != null) {
+            if (enemyWeaponBehavior.team == this.team) {
                 return;
             }
         }
 
         if (collidedObj.name.IndexOf("ArrowPrefab") != -1) {
-            WeaponBehavior arrowBehavior = collidedObj.GetComponent<WeaponBehavior>();
-            if (arrowBehavior.blocked) {
+            if (enemyWeaponBehavior.blocked) {
                 return;
             }
         }
 
-        hp -= 50;
+        int damageInflicted = this.weaponBehavior.defend(enemyWeaponBehavior);
+
+        hp -= damageInflicted;
 
         if (hp <= 0) {
             alive = false;

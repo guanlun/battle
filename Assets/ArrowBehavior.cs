@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class ArrowBehavior : WeaponBehavior {
+    private void Start() {
+        this.type = TYPE_ARROW;
+        this.damage = 30;
+    }
+
     private void OnTriggerEnter(Collider other) {
         if (!this.blocked) {
             GameObject collidedObj = other.gameObject;
