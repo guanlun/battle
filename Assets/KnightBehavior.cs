@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class KnightBehavior : SoldierBehavior {
+    private int frameCount = 0;
+
 	void Start () {
         navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -13,8 +15,6 @@ public class KnightBehavior : SoldierBehavior {
         foreach (Transform part in parts) {
             if (part.name == "Weapon") // Weapon name
             {
-                print("knight weapon");
-
                 this.weaponParent = part;
                 attackRange = 3f;
 
@@ -53,16 +53,27 @@ public class KnightBehavior : SoldierBehavior {
             return;
         }
 
-        navMeshAgent.destination = target.position;
+        if (frameCount != 0) {
+            frameCount--;
+        }
+
+        // if (frameCount == 0) {
+        //     navMeshAgent.destination = target.position;
+        // }
 
         Vector3 direction = target.position - this.transform.position;
 
+        navMeshAgent.destination = target.position;// + Vector3.Normalize(direction) * 10;
+
         if (direction.magnitude > attackRange) {
-            navMeshAgent.Resume();
+            // navMeshAgent.Resume();
             anim.SetBool("isAttacking", false);
         } else {
-            navMeshAgent.Stop();
-            transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
+            // navMeshAgent.destination = target.position + direction * 20;
+            // frameCount = 100;
+
+            // navMeshAgent.Stop();
+            // transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
             anim.SetBool("isAttacking", true);
         }
 

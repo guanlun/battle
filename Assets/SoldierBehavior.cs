@@ -25,13 +25,20 @@ public class SoldierBehavior : MonoBehaviour {
 
     protected Quaternion fallenTargetRotation;
 
+    public Camera firstPersonCamera;
+
     protected void init() {
         hp = 100;
         alive = true;
+
+        firstPersonCamera = this.transform.Find("Camera").gameObject.GetComponent<Camera>();
+        firstPersonCamera.enabled = false;
     }
 
     // Use this for initialization
     void Start() {
+        init();
+
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         anim = GetComponent<Animator>();
@@ -94,8 +101,6 @@ public class SoldierBehavior : MonoBehaviour {
                 renderer.material = Resources.Load(matType, typeof(Material)) as Material;
             }
         }
-
-        init();
     }
 
     protected void FindTarget() {
