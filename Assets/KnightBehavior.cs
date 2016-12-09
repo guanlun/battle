@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class KnightBehavior : SoldierBehavior {
     private int frameCount = 0;
+    private bool overcharging = false;
 
 	void Start () {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -49,35 +50,17 @@ public class KnightBehavior : SoldierBehavior {
         FindTarget();
 
         if (target == null) {
-            anim.SetBool("isAttacking", false);
-            return;
-        }
+            if (this.frameCount == 0) {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.right), 0.01f);
+            } else {
+                this.navMeshAgent.destination = this.transform.position + this.transform.forward * 20;
 
-        if (frameCount != 0) {
-            frameCount--;
-        }
-
-        // if (frameCount == 0) {
-        //     navMeshAgent.destination = target.position;
-        // }
-
-        Vector3 direction = target.position - this.transform.position;
-
-        navMeshAgent.destination = target.position;// + Vector3.Normalize(direction) * 10;
-
-        if (direction.magnitude > attackRange) {
-            // navMeshAgent.Resume();
-            anim.SetBool("isAttacking", false);
+                this.frameCount--;
+            }
         } else {
-            // navMeshAgent.destination = target.position + direction * 20;
-            // frameCount = 100;
-
-            // navMeshAgent.Stop();
-            // transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
-            anim.SetBool("isAttacking", true);
+            navMeshAgent.destination = target.position;
+            this.frameCount = 50;
         }
-
-        this.weaponBehavior.damage = 200;
     }
 
     protected override void gettingKilled() {
@@ -86,5 +69,48 @@ public class KnightBehavior : SoldierBehavior {
 
         // Transform back
         transform.Rotate(new Vector3(0, 0, -90));
+    }
+
+    protected override void FindTarget() {
+        // TODO: move this back to the Start function?
+        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
+
+        enemyBehaviors = new List<SoldierBehavior>();
+        foreach (SoldierBehavior behavior in agentBehavior) {
+            if (behavior.team != team) {
+                enemyBehaviors.Add(behavior);
+            }
+        }
+
+        float closestDist = float.MaxValue;
+        SoldierBehavior closestAgent = null;
+
+        foreach (SoldierBehavior behavior in enemyBehaviors) {
+            if (!behavior.alive) {
+                continue;
+            }
+
+            Vector3 enemyPosition = behavior.transform.position;
+
+            Vector3 targetDirection = Vector3.Normalize(enemyPosition - this.transform.position);
+            Vector3 movingDirection = Vector3.Normalize(this.transform.forward);
+
+            if (Vector3.Dot(targetDirection, movingDirection) < 0.5) {
+                continue;
+            }
+
+            float dist = Vector3.Distance(enemyPosition, transform.position);
+
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestAgent = behavior;
+            }
+        }
+
+        if (closestAgent != null) {
+            target = closestAgent.transform;
+        } else {
+            target = null;
+        }
     }
 }

@@ -55,7 +55,7 @@ public class SoldierBehavior : MonoBehaviour {
                 switch (weaponType) {
                     case "bow":
                         weaponPrefabName = "BowPrefab";
-                        attackRange = 20f;
+                        attackRange = 40f;
                         // navMeshAgent.stoppingDistance = 20f;
                         anim.runtimeAnimatorController = Resources.Load("ArcherAC") as RuntimeAnimatorController;
                         break;
@@ -103,7 +103,7 @@ public class SoldierBehavior : MonoBehaviour {
         }
     }
 
-    protected void FindTarget() {
+    protected virtual void FindTarget() {
         // TODO: move this back to the Start function?
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
@@ -193,6 +193,10 @@ public class SoldierBehavior : MonoBehaviour {
             damageInflicted = this.weaponBehavior.defend(enemyWeaponBehavior, Random.Range(0f, 1f));
         }
 
+        if (damageInflicted != 0) {
+            enemyWeaponBehavior.holder.attackSuccessCallback();
+        }
+
         hp -= damageInflicted;
 
         if (hp <= 0) {
@@ -203,6 +207,10 @@ public class SoldierBehavior : MonoBehaviour {
 
             this.gettingKilled();
         }
+    }
+
+    protected virtual void attackSuccessCallback() {
+
     }
 
     protected virtual void gettingKilled() {
