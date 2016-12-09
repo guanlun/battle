@@ -24,24 +24,13 @@ public class GhostFreeRoamCamera : MonoBehaviour {
 
     private void OnEnable() {
         if (cursorToggleAllowed) {
-            Screen.lockCursor = true;
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
     }
 
     private void SpawnSoldier(Vector3 position, string team) {
-        if (StateManager.currWeaponType == "horse") {
-            GameObject knight = (GameObject)Instantiate(Resources.Load("KnightPrefab"), position, Quaternion.identity);
-            KnightBehavior behavior = knight.GetComponent<KnightBehavior>();
-
-            behavior.team = team;
-        } else {
-            GameObject soldier = (GameObject)Instantiate(Resources.Load("SoldierPrefab"), position, Quaternion.identity);
-            SoldierBehavior behavior = soldier.GetComponent<SoldierBehavior>();
-
-            behavior.team = team;
-            behavior.weaponType = StateManager.currWeaponType;
-        }
+        StateManager.instantiateSoldier(position, StateManager.currWeaponType, team);
     }
 
     void Start() {
@@ -101,7 +90,11 @@ public class GhostFreeRoamCamera : MonoBehaviour {
             if (Input.GetKey(cursorToggleButton)) {
                 if (!togglePressed) {
                     togglePressed = true;
-                    Screen.lockCursor = !Screen.lockCursor;
+                    if (Cursor.lockState == CursorLockMode.Locked) {
+                        Cursor.lockState = CursorLockMode.None;
+                    } else {
+                        Cursor.lockState = CursorLockMode.Locked;
+                    }
                     Cursor.visible = !Cursor.visible;
                 }
             } else togglePressed = false;

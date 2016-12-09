@@ -79,21 +79,11 @@ public class KnightBehavior : SoldierBehavior {
     }
 
     protected override void FindTarget() {
-        // TODO: move this back to the Start function?
-        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
-
-        enemyBehaviors = new List<SoldierBehavior>();
-        foreach (SoldierBehavior behavior in agentBehavior) {
-            if (behavior.team != team) {
-                enemyBehaviors.Add(behavior);
-            }
-        }
-
         float closestDist = float.MaxValue;
         SoldierBehavior closestAgent = null;
 
-        foreach (SoldierBehavior behavior in enemyBehaviors) {
-            if (!behavior.alive) {
+        foreach (SoldierBehavior behavior in StateManager.soldierBehaviors) {
+            if (behavior.team == team) {
                 continue;
             }
 

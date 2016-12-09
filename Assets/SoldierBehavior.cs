@@ -100,20 +100,14 @@ public class SoldierBehavior : MonoBehaviour {
     }
 
     protected virtual void FindTarget() {
-        // TODO: move this back to the Start function?
-        SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
-
-        enemyBehaviors = new List<SoldierBehavior>();
-        foreach (SoldierBehavior behavior in agentBehavior) {
-            if (behavior.team != team) {
-                enemyBehaviors.Add(behavior);
-            }
-        }
-
         float closestDist = float.MaxValue;
         SoldierBehavior closestAgent = null;
+        
+        foreach (SoldierBehavior behavior in StateManager.soldierBehaviors) {
+            if (behavior.team == team) {
+                continue;
+            }
 
-        foreach (SoldierBehavior behavior in enemyBehaviors) {
             if (!behavior.alive) {
                 continue;
             }
@@ -176,8 +170,14 @@ public class SoldierBehavior : MonoBehaviour {
         WeaponBehavior enemyWeaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
 
         if (enemyWeaponBehavior != null) {
-            if (enemyWeaponBehavior.team == this.team) {
+            if (enemyWeaponBehavior.holder.target != this.transform) {
                 return;
+            }
+
+            if (enemyWeaponBehavior.type != WeaponBehavior.TYPE_ARROW) {
+                if ((enemyWeaponBehavior.team == this.team) || (!enemyWeaponBehavior.holder.alive)) {
+                    return;
+                }
             }
         }
 
