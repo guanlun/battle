@@ -141,7 +141,7 @@ ModelImporter:
       name: Run
       takeName: ArmatureAction
       firstFrame: 1
-      lastFrame: 8
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

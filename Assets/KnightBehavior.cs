@@ -83,7 +83,7 @@ public class KnightBehavior : SoldierBehavior {
         SoldierBehavior closestAgent = null;
 
         foreach (SoldierBehavior behavior in StateManager.soldierBehaviors) {
-            if (behavior.team == team) {
+            if (!behavior.alive || behavior.team == team) {
                 continue;
             }
 

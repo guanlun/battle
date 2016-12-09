@@ -43,6 +43,7 @@ public class StateManager : MonoBehaviour {
 
         behavior.team = team;
         behavior.weaponType = weaponType;
+        behavior.initialPosition = new Vector3(position.x, position.y, position.z);
 
         soldierBehaviors.Add(behavior);
     }
@@ -66,7 +67,7 @@ public class StateManager : MonoBehaviour {
 
             for (int i = 0; i < 80; i++) {
                 Vector3 pos = this.instantiationOffset + new Vector3(Random.Range(0f, 15f), 0, Random.Range(0f, 35f));
-                instantiateSoldier(pos, "sword", "blue");
+                instantiateSoldier(pos, Random.Range(0f, 1f) < 0.8 ? "sword" : "bow", "blue");
             }
         }
 

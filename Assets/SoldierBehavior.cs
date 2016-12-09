@@ -25,7 +25,7 @@ public class SoldierBehavior : MonoBehaviour {
 
     protected Quaternion fallenTargetRotation;
 
-    public Camera firstPersonCamera;
+    public Vector3 initialPosition;
 
     protected virtual void init() {
         this.hp = 100;
@@ -104,7 +104,7 @@ public class SoldierBehavior : MonoBehaviour {
         SoldierBehavior closestAgent = null;
         
         foreach (SoldierBehavior behavior in StateManager.soldierBehaviors) {
-            if (behavior.team == team) {
+            if (!behavior.alive || behavior.team == team) {
                 continue;
             }
 
@@ -146,17 +146,19 @@ public class SoldierBehavior : MonoBehaviour {
             return;
         }
 
-        navMeshAgent.destination = target.position;
+        this.navMeshAgent.destination = target.position;
 
         Vector3 direction = target.position - this.transform.position;
 
         if (direction.magnitude > attackRange) {
-            navMeshAgent.Resume();
-            anim.SetBool("isAttacking", false);
+            this.navMeshAgent.Resume();
+
+            this.anim.SetBool("isAttacking", false);
         } else {
-            navMeshAgent.Stop();
-            transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
-            anim.SetBool("isAttacking", true);
+            this.navMeshAgent.Stop();
+
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(direction), 0.2f);
+            this.anim.SetBool("isAttacking", true);
         }
     }
 
@@ -170,12 +172,12 @@ public class SoldierBehavior : MonoBehaviour {
         WeaponBehavior enemyWeaponBehavior = collidedObj.GetComponent<WeaponBehavior>();
 
         if (enemyWeaponBehavior != null) {
-            if (enemyWeaponBehavior.holder.target != this.transform) {
-                return;
-            }
-
             if (enemyWeaponBehavior.type != WeaponBehavior.TYPE_ARROW) {
                 if ((enemyWeaponBehavior.team == this.team) || (!enemyWeaponBehavior.holder.alive)) {
+                    return;
+                }
+
+                if (enemyWeaponBehavior.holder.target != this.transform) {
                     return;
                 }
             }

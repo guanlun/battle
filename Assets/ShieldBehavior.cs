@@ -4,7 +4,7 @@ using System.Collections;
 public class ShieldBehavior : WeaponBehavior {
     private void Start() {
         this.type = TYPE_SHIELD;
-        this.damage = 10;
+        this.damage = 5;
     }
 
     public override int defend(WeaponBehavior attackWeapon, float rand) {
