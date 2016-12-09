@@ -16,9 +16,9 @@ public class KnightBehavior : SoldierBehavior {
             if (part.name == "Weapon") // Weapon name
             {
                 this.weaponParent = part;
-                attackRange = 3f;
+                attackRange = 0f;
 
-                this.weapon = (GameObject)Instantiate(Resources.Load("SpearPrefab"));
+                this.weapon = (GameObject)Instantiate(Resources.Load("LancePrefab"));
                 this.weapon.transform.parent = part.transform;
                 this.weapon.transform.localPosition = new Vector3(0, 0, 0);
                 this.weapon.transform.localScale = new Vector3(1, 1, 1);

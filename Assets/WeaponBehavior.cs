@@ -14,6 +14,7 @@ public class WeaponBehavior : MonoBehaviour {
     public const string TYPE_SHIELD = "shield";
     public const string TYPE_BOW = "bow";
     public const string TYPE_ARROW = "arrow";
+    public const string TYPE_LANCNE = "lance";
 
     protected const float BACK_BLOCK_CHANGE = 0.2f;
 

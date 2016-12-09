@@ -31,8 +31,8 @@ public class SoldierBehavior : MonoBehaviour {
         hp = 100;
         alive = true;
 
-        firstPersonCamera = this.transform.Find("Camera").gameObject.GetComponent<Camera>();
-        firstPersonCamera.enabled = false;
+        // firstPersonCamera = this.transform.Find("Camera").gameObject.GetComponent<Camera>();
+        // firstPersonCamera.gameObject.SetActive(false);
     }
 
     // Use this for initialization

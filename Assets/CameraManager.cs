@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        /*
         SoldierBehavior[] agentBehavior = GameObject.FindObjectsOfType(typeof(SoldierBehavior)) as SoldierBehavior[];
 
         this.soldierCameras = new List<Camera>();
@@ -27,20 +28,21 @@ public class CameraManager : MonoBehaviour {
         mainCamera = mainCamScript.gameObject.GetComponent<Camera>();
 
         if (Input.GetKeyUp(KeyCode.C)) {
-            this.mainCamera.enabled = false;
+            this.mainCamera.gameObject.SetActive(false);
 
             int camNum = this.soldierCameras.Count;
             int idx = Random.Range(0, camNum);
 
             this.activeFirstPersonCamera = this.soldierCameras[idx];
 
-            this.activeFirstPersonCamera.enabled = true;
+            this.activeFirstPersonCamera.gameObject.SetActive(true);
         }
 
         if (Input.GetKeyUp(KeyCode.M)) {
-            this.activeFirstPersonCamera.enabled = false;
+            this.activeFirstPersonCamera.gameObject.SetActive(false);
 
-            this.mainCamera.enabled = true;
+            this.mainCamera.gameObject.SetActive(true);
         }
+        */
     }
 }

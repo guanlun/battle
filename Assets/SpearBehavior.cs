@@ -23,6 +23,9 @@ public class SpearBehavior : WeaponBehavior {
                 case TYPE_SHIELD:
                     blocked = (rand < 0.1f);
                     break;
+                default:
+                    blocked = false;
+                    break;
             }
         } else {
             blocked = (rand < BACK_BLOCK_CHANGE);

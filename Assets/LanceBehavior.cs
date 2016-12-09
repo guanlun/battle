@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BowBehavior : WeaponBehavior {
+public class LanceBehavior : WeaponBehavior {
     private void Start() {
-        this.type = TYPE_BOW;
-        this.damage = 0;
+        this.type = TYPE_LANCNE;
+        this.damage = 100;
     }
 
     public override int defend(WeaponBehavior attackWeapon, float rand) {
@@ -15,10 +15,10 @@ public class BowBehavior : WeaponBehavior {
         if (defendAngle > 0.8f) { // Facing the enemy
             switch (attackWeapon.type) {
                 case TYPE_SPEAR:
-                    blocked = (rand < 0.2f);
+                    blocked = (rand < 0.5f);
                     break;
                 case TYPE_SWORD:
-                    blocked = (rand < 0.2f);
+                    blocked = (rand < 0.3f);
                     break;
                 case TYPE_SHIELD:
                     blocked = (rand < 0.1f);
