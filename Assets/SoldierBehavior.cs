@@ -27,12 +27,8 @@ public class SoldierBehavior : MonoBehaviour {
 
     public Camera firstPersonCamera;
 
-    protected void init() {
-        hp = 100;
-        alive = true;
-
-        // firstPersonCamera = this.transform.Find("Camera").gameObject.GetComponent<Camera>();
-        // firstPersonCamera.gameObject.SetActive(false);
+    protected virtual void init() {
+        this.hp = 100;
     }
 
     // Use this for initialization
@@ -140,6 +136,10 @@ public class SoldierBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (StateManager.paused) {
+            return;
+        }
+
         if (!alive) {
             transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
             return;
@@ -193,10 +193,6 @@ public class SoldierBehavior : MonoBehaviour {
             damageInflicted = this.weaponBehavior.defend(enemyWeaponBehavior, Random.Range(0f, 1f));
         }
 
-        if (damageInflicted != 0) {
-            enemyWeaponBehavior.holder.attackSuccessCallback();
-        }
-
         hp -= damageInflicted;
 
         if (hp <= 0) {
@@ -209,10 +205,6 @@ public class SoldierBehavior : MonoBehaviour {
         }
     }
 
-    protected virtual void attackSuccessCallback() {
-
-    }
-
     protected virtual void gettingKilled() {
         transform.Rotate(new Vector3(-90, 0, 0));
         fallenTargetRotation = transform.rotation;
@@ -222,6 +214,10 @@ public class SoldierBehavior : MonoBehaviour {
     }
 
     void ArcherLoose() {
+        if (target == null) {
+            return;
+        }
+
         Vector3 pos = new Vector3();
         pos.x = transform.position.x;
         pos.y = transform.position.y + 1.5f;

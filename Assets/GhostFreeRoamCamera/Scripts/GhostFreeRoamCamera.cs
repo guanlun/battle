@@ -22,8 +22,6 @@ public class GhostFreeRoamCamera : MonoBehaviour {
     private bool moving = false;
     private bool togglePressed = false;
 
-    private string weaponType = "sword";
-
     private void OnEnable() {
         if (cursorToggleAllowed) {
             Screen.lockCursor = true;
@@ -32,7 +30,7 @@ public class GhostFreeRoamCamera : MonoBehaviour {
     }
 
     private void SpawnSoldier(Vector3 position, string team) {
-        if (weaponType == "horse") {
+        if (StateManager.currWeaponType == "horse") {
             GameObject knight = (GameObject)Instantiate(Resources.Load("KnightPrefab"), position, Quaternion.identity);
             KnightBehavior behavior = knight.GetComponent<KnightBehavior>();
 
@@ -42,12 +40,11 @@ public class GhostFreeRoamCamera : MonoBehaviour {
             SoldierBehavior behavior = soldier.GetComponent<SoldierBehavior>();
 
             behavior.team = team;
-            behavior.weaponType = weaponType;
+            behavior.weaponType = StateManager.currWeaponType;
         }
     }
 
     void Start() {
-        Time.timeScale = 0;
     }
 
     private void Update() {
@@ -68,30 +65,6 @@ public class GhostFreeRoamCamera : MonoBehaviour {
                     SpawnSoldier(hit.point, team);
                 }
             }
-        }
-
-        if (Input.GetKeyUp(KeyCode.Alpha1)) {
-            weaponType = "sword";
-        }
-
-        if (Input.GetKeyUp(KeyCode.Alpha2)) {
-            weaponType = "bow";
-        }
-
-        if (Input.GetKeyUp(KeyCode.Alpha3)) {
-            weaponType = "spear";
-        }
-
-        if (Input.GetKeyUp(KeyCode.Alpha4)) {
-            weaponType = "shield";
-        }
-        
-        if (Input.GetKeyUp(KeyCode.Alpha5)) {
-            weaponType = "horse";
-        }
-
-        if (Input.GetKeyUp(KeyCode.Return)) {
-            Time.timeScale = 1 - Time.timeScale;
         }
 
         if (allowMovement) {

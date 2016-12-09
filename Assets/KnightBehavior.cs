@@ -3,9 +3,14 @@ using System.Collections.Generic;
 
 public class KnightBehavior : SoldierBehavior {
     private int frameCount = 0;
-    private bool overcharging = false;
 
-	void Start () {
+    protected override void init() {
+        this.hp = 300;
+    }
+
+    void Start () {
+        init();
+
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         anim = GetComponent<Animator>();
@@ -37,11 +42,13 @@ public class KnightBehavior : SoldierBehavior {
                 renderer.material = Resources.Load(matType, typeof(Material)) as Material;
             }
         }
-
-        init();
     }
 	
 	void Update () {
+        if (StateManager.paused) {
+            return;
+        }
+
         if (!alive) {
             transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
             return;
@@ -59,7 +66,7 @@ public class KnightBehavior : SoldierBehavior {
             }
         } else {
             navMeshAgent.destination = target.position;
-            this.frameCount = 50;
+            this.frameCount = 30;
         }
     }
 
