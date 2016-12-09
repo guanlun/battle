@@ -79,4 +79,12 @@ public class KnightBehavior : SoldierBehavior {
 
         this.weaponBehavior.damage = 200;
     }
+
+    protected override void gettingKilled() {
+        transform.Rotate(new Vector3(0, 0, 90));
+        fallenTargetRotation = transform.rotation;
+
+        // Transform back
+        transform.Rotate(new Vector3(0, 0, -90));
+    }
 }

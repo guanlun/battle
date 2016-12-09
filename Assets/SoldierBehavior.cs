@@ -201,12 +201,16 @@ public class SoldierBehavior : MonoBehaviour {
 
             navMeshAgent.enabled = false;
 
-            transform.Rotate(new Vector3(-90, 0, 0));
-            fallenTargetRotation = transform.rotation;
-
-            // Transform back
-            transform.Rotate(new Vector3(90, 0, 0));
+            this.gettingKilled();
         }
+    }
+
+    protected virtual void gettingKilled() {
+        transform.Rotate(new Vector3(-90, 0, 0));
+        fallenTargetRotation = transform.rotation;
+
+        // Transform back
+        transform.Rotate(new Vector3(90, 0, 0));
     }
 
     void ArcherLoose() {
