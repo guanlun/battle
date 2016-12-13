@@ -4,7 +4,7 @@ using System.Collections;
 public class LanceBehavior : WeaponBehavior {
     private void Start() {
         this.type = TYPE_LANCNE;
-        this.damage = 100;
+        this.damage = 150;
     }
 
     public override int defend(WeaponBehavior attackWeapon, float rand) {
@@ -12,10 +12,10 @@ public class LanceBehavior : WeaponBehavior {
 
         bool blocked = false;
 
-        if (defendAngle > 0.8f) { // Facing the enemy
+        if (defendAngle > 0.5f) { // Facing the enemy
             switch (attackWeapon.type) {
                 case TYPE_SPEAR:
-                    blocked = (rand < 0.5f);
+                    blocked = (rand < 0.3f);
                     break;
                 case TYPE_SWORD:
                     blocked = (rand < 0.3f);
@@ -28,9 +28,21 @@ public class LanceBehavior : WeaponBehavior {
                     break;
             }
         } else {
-            blocked = (rand < BACK_BLOCK_CHANGE);
+            if (this.holder.getSpeed() > 3) {
+                blocked = (rand < 0.2f);
+            } else {
+                blocked = (rand < BACK_BLOCK_CHANGE);
+            }
         }
 
-        return blocked ? 0 : attackWeapon.damage;
+        if (blocked) {
+            return 0;
+        }
+
+        if (attackWeapon.type == "spear" || attackWeapon.type == "lance") {
+            return (int)(attackWeapon.damage * 1.5f);
+        } else {
+            return (int)(attackWeapon.damage / 1.5f);
+        }
     }
 }

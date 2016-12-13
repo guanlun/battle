@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class KnightBehavior : SoldierBehavior {
     private int frameCount = 0;
+    private int fallDownFrameCount = 40;
 
     protected override void init() {
         this.hp = 300;
@@ -16,6 +17,7 @@ public class KnightBehavior : SoldierBehavior {
         anim = GetComponent<Animator>();
 
         anim.speed = 0.5f;
+        // anim.enabled = false;
 
         Transform[] parts = GetComponentsInChildren<Transform>();
         foreach (Transform part in parts) {
@@ -50,8 +52,12 @@ public class KnightBehavior : SoldierBehavior {
         }
 
         if (!alive) {
-            transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
-            return;
+            if (fallDownFrameCount == 0) {
+                transform.rotation = Quaternion.Slerp(transform.rotation, fallenTargetRotation, 0.1f);
+                return;
+            } else {
+                fallDownFrameCount--;
+            }
         }
 
         FindTarget();

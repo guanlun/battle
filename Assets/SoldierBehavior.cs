@@ -40,6 +40,7 @@ public class SoldierBehavior : MonoBehaviour {
         anim = GetComponent<Animator>();
 
         anim.speed = 0.5f;
+        // anim.enabled = false;
 
         Transform[] parts = GetComponentsInChildren<Transform>();
         foreach (Transform part in parts) {
@@ -52,28 +53,26 @@ public class SoldierBehavior : MonoBehaviour {
                     case "bow":
                         weaponPrefabName = "BowPrefab";
                         attackRange = 40f;
-                        // navMeshAgent.stoppingDistance = 20f;
                         anim.runtimeAnimatorController = Resources.Load("ArcherAC") as RuntimeAnimatorController;
                         break;
 
                     case "sword":
                         weaponPrefabName = "SwordPrefab";
                         attackRange = 2f;
-                        // navMeshAgent.stoppingDistance = 2f;
+                        navMeshAgent.speed = 4;
+                        navMeshAgent.radius = 0.15f;
                         anim.runtimeAnimatorController = Resources.Load("SwordManAC") as RuntimeAnimatorController;
                         break;
 
                     case "spear":
                         weaponPrefabName = "SpearPrefab";
-                        attackRange = 5f;
-                        // navMeshAgent.stoppingDistance = 5f;
+                        attackRange = 4.6f;
                         anim.runtimeAnimatorController = Resources.Load("SpearManAC") as RuntimeAnimatorController;
                         break;
 
                     case "shield":
                         weaponPrefabName = "ShieldPrefab";
                         attackRange = 1;
-                        // navMeshAgent.stoppingDistance = 1;
 
                         anim.runtimeAnimatorController = Resources.Load("ShieldManAC") as RuntimeAnimatorController;
                         break;
@@ -149,6 +148,12 @@ public class SoldierBehavior : MonoBehaviour {
         this.navMeshAgent.destination = target.position;
 
         Vector3 direction = target.position - this.transform.position;
+
+        if (this.weaponType == "spear" && direction.magnitude < 4) {
+            this.navMeshAgent.Resume();
+            this.navMeshAgent.destination = this.transform.position - direction;
+            return;
+        }
 
         if (direction.magnitude > attackRange) {
             this.navMeshAgent.Resume();
@@ -249,5 +254,19 @@ public class SoldierBehavior : MonoBehaviour {
             Random.Range(-randScale, randScale) * transform.right;
 
         rb.velocity = vel + random;
+    }
+
+    public float getSpeed() {
+        return Vector3.Magnitude(this.navMeshAgent.velocity);
+    }
+
+    public void pause() {
+        this.anim.enabled = false;
+        this.navMeshAgent.Stop();
+    }
+
+    public void resume() {
+        this.anim.enabled = true;
+        this.navMeshAgent.Resume();
     }
 }

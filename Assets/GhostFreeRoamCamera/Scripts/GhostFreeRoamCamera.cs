@@ -48,7 +48,7 @@ public class GhostFreeRoamCamera : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit)) {
                 Transform hitObj = hit.transform;
-                if (hitObj.name == "Ground" || hitObj.parent.name == "Castle") {
+                if (hitObj.name == "Terrain") {
                     string team = leftButtonUp ? "red" : "blue";
 
                     SpawnSoldier(hit.point, team);

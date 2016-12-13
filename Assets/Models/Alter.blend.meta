@@ -470,7 +470,7 @@ ModelImporter:
       name: Walk
       takeName: Default Take
       firstFrame: 36
-      lastFrame: 60
+      lastFrame: 48
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -578,7 +578,7 @@ ModelImporter:
       name: Walk with shield
       takeName: Default Take
       firstFrame: 140
-      lastFrame: 164
+      lastFrame: 152
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
