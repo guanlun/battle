@@ -115,8 +115,91 @@ public class StateManager : MonoBehaviour {
             }
         }
 
+        if (Input.GetKeyUp(KeyCode.Alpha3)) {
+            for (int i = 0; i < 25; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i, 0, -60);
+                instantiateSoldier(pos, "shield", "red");
+            }
 
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            for (int i = 0; i < 25; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i, 0, -62);
+                instantiateSoldier(pos, "shield", "red");
+            }
+
+            for (int i = 0; i < 25; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i, 0, -66);
+                instantiateSoldier(pos, "spear", "red");
+            }
+
+            for (int i = 0; i < 25; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i, 0, -68);
+                instantiateSoldier(pos, "spear", "red");
+            }
+
+            for (int i = 0; i < 25; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i, 0, -68);
+                instantiateSoldier(pos, "spear", "red");
+            }
+
+            for (int i = 0; i < 35; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i - 5, 0, -75);
+                instantiateSoldier(pos, "bow", "red");
+            }
+
+            for (int i = 0; i < 20; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i - 70 + Random.Range(-10, 10), 0, -15 + Random.Range(-10, 10));
+                instantiateSoldier(pos, "bow", "red");
+            }
+
+            for (int i = 0; i < 2; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 45, 0, -60);
+                instantiateSoldier(pos, "horse", "red");
+            }
+
+            for (int i = 0; i < 4; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 42, 0, -65);
+                instantiateSoldier(pos, "horse", "red");
+            }
+
+            for (int i = 0; i < 6; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 39, 0, -70);
+                instantiateSoldier(pos, "horse", "red");
+            }
+
+            for (int i = 0; i < 45; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i - 12.5f, 0, 28);
+                instantiateSoldier(pos, "shield", "blue");
+            }
+
+            for (int i = 0; i < 30; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i - 5, 0, 30);
+                instantiateSoldier(pos, "sword", "blue");
+            }
+
+            for (int i = 0; i < 30; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i - 5, 0, 32);
+                instantiateSoldier(pos, "sword", "blue");
+            }
+
+            for (int i = 0; i < 16; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 35, 0, 50);
+                instantiateSoldier(pos, "horse", "blue");
+            }
+
+            for (int i = 0; i < 16; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 35, 0, 55);
+                instantiateSoldier(pos, "horse", "blue");
+            }
+
+            for (int i = 0; i < 16; i++) {
+                Vector3 pos = this.instantiationOffset + new Vector3(i * 3 + 35, 0, 60);
+                instantiateSoldier(pos, "horse", "blue");
+            }
+        }
+
+
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll != 0) {
             weaponTexts[weaponTypeIdx].color = Color.black;
 

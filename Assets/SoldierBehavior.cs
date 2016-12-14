@@ -52,7 +52,7 @@ public class SoldierBehavior : MonoBehaviour {
                 switch (weaponType) {
                     case "bow":
                         weaponPrefabName = "BowPrefab";
-                        attackRange = 40f;
+                        attackRange = 50f;
                         anim.runtimeAnimatorController = Resources.Load("ArcherAC") as RuntimeAnimatorController;
                         break;
 

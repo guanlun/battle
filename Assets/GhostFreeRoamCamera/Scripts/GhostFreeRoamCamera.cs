@@ -2,8 +2,8 @@
 
 [RequireComponent(typeof(Camera))]
 public class GhostFreeRoamCamera : MonoBehaviour {
-    public float initialSpeed = 10f;
-    public float increaseSpeed = 1.25f;
+    public float initialSpeed = 5f;
+    public float increaseSpeed = 0.25f;
 
     public bool allowMovement = true;
     public bool allowRotation = true;
