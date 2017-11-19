@@ -10,4 +10,4 @@ Soldiers available:
 * Shieldman: protect your army from the archers!
 * Knight: they are unstoppable
 
-View the [demo video|https://www.youtube.com/watch?v=KzFbXywn-BI&t=1s].
+View the [demo video](https://www.youtube.com/watch?v=KzFbXywn-BI).
